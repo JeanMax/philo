@@ -6,7 +6,7 @@
 /*   By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/29 13:23:15 by mcanal            #+#    #+#             */
-/*   Updated: 2015/02/24 03:34:47 by mcanal           ###   ########.fr       */
+/*   Updated: 2015/02/24 05:32:05 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,14 @@ struct	s_env
 	int				endian;
 	char			*data;
 	t_char			hooking;
+};
+
+typedef struct s_ob	t_ob;
+struct	s_ob
+{
+	pthread_mutex_t	baguette[7];
+	int				test;
+	int				which_bag;
 };
 
 /*
