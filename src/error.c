@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/09 19:39:48 by mcanal            #+#    #+#             */
-/*   Updated: 2015/08/03 14:01:51 by mcanal           ###   ########.fr       */
+/*   Updated: 2015/08/03 15:42:13 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@
 void		error(char e, char *msg)
 {
 	if (e == USAGE)
-		fail("Usage: "), fail(msg), failn(USAGE_MSG);
+		fail("Usage: "), fail(msg), failn(".");
 	else if (e == THR_CREATE)
-		fail(THR_CREATE_MSG);
+		failn("Error while creating thread.");
 	else if (e == THR_JOIN)
-		fail(THR_JOIN_MSG);
+		failn("Error while joining thread.");
 	exit(-1);
 }

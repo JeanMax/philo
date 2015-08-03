@@ -6,7 +6,7 @@
 /*   By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/29 13:23:15 by mcanal            #+#    #+#             */
-/*   Updated: 2015/08/03 14:01:56 by mcanal           ###   ########.fr       */
+/*   Updated: 2015/08/03 15:42:21 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,6 @@
 # define EAT_T 5
 # define REST_T 5
 # define TIMEOUT 120
-
-# define USAGE_MSG "Usage: ./philo"
-# define THR_CREATE_MSG "Error while creating thread."
-# define THR_JOIN_MSG "Error while joining thread."
-
 
 /*
 ** enum
