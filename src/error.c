@@ -5,34 +5,24 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/02/18 20:39:30 by mcanal            #+#    #+#             */
-/*   Updated: 2015/02/24 03:35:22 by mcanal           ###   ########.fr       */
+/*   Created: 2015/02/09 19:39:48 by mcanal            #+#    #+#             */
+/*   Updated: 2015/08/03 14:01:51 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
-** errors handling
+** error handling
 */
 
 #include "header.h"
 
-void			error(t_char c)
+void		error(char e, char *msg)
 {
-	if (c == USAGE)
-		failn(USAGE_MSG);
-	else if (c == IMG_PTR)
-		failn(IMG_PTR_MSG);
-	else if (c == PUT_PIX)
-		failn(PUT_PIX_MSG);
-	else if (c == MLX_INI)
-		failn(MLX_INI_MSG);
-	else if (c == MLX_WIN)
-		failn(MLX_WIN_MSG);
-	else if (c == MLX_DATA)
-		failn(MLX_DATA_MSG);
-	else if (c == THR_CRE)
-		failn(THR_CRE_MSG);
-	else if (c == THR_JOI)
-		failn(THR_JOI_MSG);
+	if (e == USAGE)
+		fail("Usage: "), fail(msg), failn(USAGE_MSG);
+	else if (e == THR_CREATE)
+		fail(THR_CREATE_MSG);
+	else if (e == THR_JOIN)
+		fail(THR_JOIN_MSG);
 	exit(-1);
 }

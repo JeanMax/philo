@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/16 18:09:34 by mcanal            #+#    #+#             */
-/*   Updated: 2015/02/24 06:06:06 by mcanal           ###   ########.fr       */
+/*   Updated: 2015/08/03 14:02:44 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,36 +38,15 @@ static void		*thread_it(void *arg)
 	return (NULL);
 }
 
-static void		init(t_env *e)
-{
-	e->hooking = 1;
-	if (!(e->mlx = mlx_init()))
-		error(MLX_INI);
-	if (!(e->win = mlx_new_window(e->mlx, WIN_SIZE, WIN_SIZE, "PhiloZboub")))
-		error(MLX_WIN);
-	if (!(e->img = mlx_new_image(e->mlx, WIN_SIZE, WIN_SIZE)))
-		error(IMG_PTR);
-	e->data = mlx_get_data_addr(e->img, &(e->bpp), &(e->x_len), &(e->endian));
-	if (!e->data)
-		error(MLX_DATA);
-	mlx_key_hook(e->win, key_hook, e);
-	mlx_mouse_hook(e->win, mouse_hook, e);
-	mlx_loop_hook(e->mlx, loop_hook, e);
-	mlx_hook(e->win, MotionNotify, PointerMotionMask, mouse_move, e);
-	mlx_expose_hook(e->win, ex_hook, e);
-}
-
 int				main(int ac, char **av)
 {
-	t_env		e;
 	pthread_t	t[7];
 	int			i;
 	t_ob		tob;
 
-	av = av; //debug
+	(void)av; //debug
 	if (ac != 1)
-		error(USAGE);
-	init(&e);
+		error(USAGE, *av);
 
 	i = 0;
 	while (i < 7)
@@ -79,14 +58,13 @@ int				main(int ac, char **av)
 	{
 		tob.which_bag = i;
 		if (pthread_create(&t[i++], NULL, thread_it, (void *)&tob))
-			error(THR_CRE);
+			error(THR_CREATE, NULL);
 	}
 	i = 0;
 	while (i < 7)
 		if (pthread_join(t[i++], NULL))
-			error(THR_JOI);
+			error(THR_JOIN, NULL);
 	ft_debugnbr("I'm after the thread", tob.test);
 
-	mlx_loop(e.mlx);
 	return (0);
 }

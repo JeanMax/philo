@@ -6,13 +6,15 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/26 23:12:33 by mcanal            #+#    #+#             */
-/*   Updated: 2015/02/19 09:53:25 by mcanal           ###   ########.fr       */
+/*   Updated: 2015/07/14 23:23:06 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
 ** Print the double n on stdout, with colors!
 ** clr = yellow, blue, red, green, pink, sky, white, (default = grey)
+**     while (swap < 1 && swap != 0)
+** this causes a warning and probably some bugs (line 31)
 */
 
 #include "libft.h"
@@ -26,7 +28,7 @@ void	ft_putdbl_clr(double nbr, char *clr)
 	ft_putchar_clr('.', clr);
 	nbr -= (int)nbr;
 	swap = nbr * 10;
-	while (swap < 0)
+	while (swap < 1)
 	{
 		ft_putchar_clr('0', clr);
 		swap *= 10;
