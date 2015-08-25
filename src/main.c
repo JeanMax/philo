@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/16 18:09:34 by mcanal            #+#    #+#             */
-/*   Updated: 2015/08/03 14:02:44 by mcanal           ###   ########.fr       */
+/*   Updated: 2015/08/05 23:37:31 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,55 +16,163 @@
 
 #include "header.h"
 
-static void		*thread_it(void *arg)
+static void		think(t_philo *ph)
 {
-	t_ob		*tob;
-	int			i;
-	
-	tob = (t_ob *)arg;
-	usleep(2000000);
-	i = 0;
-	ft_debugstr("1", "1");
-	while (i < 7)
-		pthread_mutex_lock(&(tob->baguette[i++]));
-	tob->test += 10;
-	ft_debugstr("LOCKED?", "ZBOUB");
-	if (tob->test == 10)
-		tob->test -= 10;
-	usleep(2000000);
-	i = 0;
-	while (i < 7)
-		pthread_mutex_unlock(&(tob->baguette[i++]));
+	(void)ph;
+	ph->state = THINK;
+	ph->life -= THINK_T;
+	sleep(THINK_T);
+}
+
+static void		eat(t_philo *ph)
+{
+	ph->state = EAT;
+	ph->life = MAX_LIFE;
+	sleep(EAT_T);
+}
+
+static void		rest(t_philo *ph)
+{
+	ph->state = REST;
+	ph->life -= REST_T;
+	sleep(REST_T);
+}
+
+static void		*philo_thread(void *arg)
+{
+	t_philo		*ph;
+
+	ph = (t_philo *)arg;
+	ph->life = MAX_LIFE;
+	ph->state = REST;
+	while (ph->life > 0)
+	{
+		ft_debugnbr("id", (int)ph->id); //debug
+		ft_debugnbr("life", (int)ph->life); //debug
+		if (ph->state != EAT && !pthread_mutex_trylock(ph->l_stick))
+		{
+			if (!pthread_mutex_trylock(ph->r_stick)) //eating
+			{
+				eat(ph);
+				pthread_mutex_unlock(ph->r_stick);
+				pthread_mutex_unlock(ph->l_stick);
+			}
+			else //right stick busy
+			{
+				rest(ph);
+				pthread_mutex_unlock(ph->l_stick);
+			}
+		}
+		else //left stick busy
+		{
+			rest(ph);
+		}
+	}
+	ft_debugnbr("DEAD", (int)&arg); //debug
 	return (NULL);
 }
 
-int				main(int ac, char **av)
+static void	 event_sdl(void)
 {
-	pthread_t	t[7];
-	int			i;
-	t_ob		tob;
+	SDL_Event event;
 
-	(void)av; //debug
+	while (TRUE)
+	{
+		SDL_WaitEvent(&event);
+		if (event.type == SDL_QUIT)
+			break ;
+	}
+	SDL_Quit();
+	exit(EXIT_SUCCESS);
+}
+
+static void		launch_threads(pthread_t *philo)
+{
+	t_philo			ph[NB_PHILO];
+	pthread_mutex_t stick[NB_PHILO];
+	size_t			i;
+
+	i = 0;
+	while (i < NB_PHILO)	//init all mutex
+		pthread_mutex_init(&(stick[i++]), NULL);
+	i = 0;
+	while (i < NB_PHILO)	//create all philo threads
+	{
+		ph[i].l_stick = &stick[i];
+		ph[i].r_stick = &stick[i + 1 >= NB_PHILO ? 0 : i + 1];
+		ph[i].id = i;
+		if (pthread_create(&philo[i], NULL, philo_thread, (void *)&ph[i]))
+			error(THR_CREATE, NULL);
+		i++;
+	}
+}
+
+static void		*timer_thread(void *arg)
+{
+	size_t		t;
+	SDL_Surface	*screen;
+
+	screen = (SDL_Surface *)arg;
+	t = TIMEOUT;
+	Uint8 test = 255;
+	while (t--)
+	{
+		SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, test, 0, 0));
+		SDL_Flip(screen); //refresh
+		sleep(1);
+		test -= 10;
+	}
+	ft_debugnbr("TIMEOUT", 42); //debug
+	SDL_Quit();
+	exit(EXIT_SUCCESS);
+}
+
+static void		time_loop(void)
+{
+	pthread_t		timer;
+	SDL_Surface		*screen;
+
+	//init SDL
+	//screen = NULL; //useless?
+	if (SDL_Init(SDL_INIT_VIDEO) == -1)
+		error(SDL_INIT, NULL);
+	if (!(screen = SDL_SetVideoMode(WIN_WIDTH, WIN_HEIGHT, WIN_BPP, \
+						SDL_HWSURFACE | SDL_DOUBLEBUF)))
+		error(SDL_SETVIDEO, NULL); //SDL_GetError());
+	SDL_WM_SetCaption("Zboub", NULL);
+
+	//timer thread
+	if (pthread_create(&timer, NULL, timer_thread, (void *)screen))
+		error(THR_CREATE, NULL);
+}
+
+static void		join_threads(pthread_t *philo)
+{
+	size_t			i;
+
+	//wait for all threads to die
+	i = 0;
+	while (i < NB_PHILO)
+		if (pthread_join(philo[i++], NULL))
+			error(THR_JOIN, NULL);
+	//TODO: kill timer thread? (detach)
+}
+
+int				main(int ac, char **av, char **ae)
+{
+	pthread_t		philo[NB_PHILO + 1];
+
 	if (ac != 1)
 		error(USAGE, *av);
+	if (!*ae)
+		error(ENV, NULL);
 
-	i = 0;
-	while (i < 7)
-		pthread_mutex_init(&(tob.baguette[i++]), NULL);
-	tob.test = 0;
-	i = 0;
-	ft_debugnbr("I'm before the thread", tob.test);
-	while (i < 7)
-	{
-		tob.which_bag = i;
-		if (pthread_create(&t[i++], NULL, thread_it, (void *)&tob))
-			error(THR_CREATE, NULL);
-	}
-	i = 0;
-	while (i < 7)
-		if (pthread_join(t[i++], NULL))
-			error(THR_JOIN, NULL);
-	ft_debugnbr("I'm after the thread", tob.test);
+	//stuffs
+	launch_threads(philo);
+	time_loop();
+	event_sdl();
+	join_threads(philo);
 
-	return (0);
+	SDL_Quit();	
+	return (EXIT_SUCCESS);
 }

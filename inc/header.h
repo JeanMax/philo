@@ -6,7 +6,7 @@
 /*   By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/29 13:23:15 by mcanal            #+#    #+#             */
-/*   Updated: 2015/08/03 15:42:21 by mcanal           ###   ########.fr       */
+/*   Updated: 2015/08/05 23:22:18 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,41 @@
 # define HEADER_H
 
 # define MAX_LIFE 100
-# define EAT_T 5
-# define REST_T 5
-# define TIMEOUT 120
+# define EAT_T 2
+# define REST_T 1
+# define THINK_T 1
+# define TIMEOUT 20
+# define NB_PHILO 3
+
+# define WIN_HEIGHT 400
+# define WIN_WIDTH 600
+# define WIN_BPP 32
 
 /*
 ** enum
 */
-enum e_zboub
+enum e_rror
 {
 	USAGE,
+	ENV,
 	THR_CREATE,
-	THR_JOIN
+	THR_JOIN,
+	SDL_INIT,
+	SDL_SETVIDEO
+};
+
+enum e_state
+{
+	REST,
+	EAT,
+	THINK
 };
 
 /*
 ** include
 */
-# include "../libft/inc/libft.h"
+# include "libft.h"
+# include "SDL.h"
 # include <unistd.h>
 # include <stdlib.h>
 # include <pthread.h>
@@ -44,12 +61,14 @@ enum e_zboub
 /*
 ** struct def
 */
-typedef struct s_ob	t_ob;
-struct	s_ob
+typedef struct s_philo	t_philo;
+struct	s_philo
 {
-	pthread_mutex_t	baguette[7];
-	int				test;
-	int				which_bag;
+	pthread_mutex_t	*r_stick;
+	pthread_mutex_t	*l_stick;
+	size_t			life;
+	char			state;
+	size_t			id;
 };
 
 /*

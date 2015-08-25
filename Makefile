@@ -6,7 +6,7 @@
 #    By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/29 13:16:03 by mcanal            #+#    #+#              #
-#    Updated: 2015/08/03 14:06:52 by mcanal           ###   ########.fr        #
+#    Updated: 2015/08/05 19:20:05 by mcanal           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -21,9 +21,10 @@ OBJS =	$(SRC:%.c=$(O_DIR)/%.o)
 DEPS =  $(OBJS:%.o=%.d)
 
 LIB = libft/libft.a
-I_DIR = -I inc/
+I_DIR = -I./libft/inc/ -I./inc/ -I/usr/include/SDL/
 CFLAGS = -Wall -Wextra -Werror -O2
 THREAD = -pthread
+SDL = -lSDL -lSDL_mixer 
 CC = clang
 RM = rm -rf
 MKDIR = mkdir -p
@@ -43,7 +44,7 @@ debug: debug_lib $(NAME) $(S_NAME)
 debug_lib:
 	@$(MAKE) -C libft debug
 
-sanitize: CFLAGS = -g -ggdb -O2 -fsanitize=address,undefined
+sanitize: CFLAGS = -g -ggdb -O2 -fsanitize=address,undefined -ferror-limit=5
 sanitize: sanitize_lib $(NAME) $(S_NAME)
 sanitize_lib:
 	@$(MAKE) -C libft sanitize
@@ -61,7 +62,7 @@ lib:
 -include $(DEPS)
 
 $(NAME): $(OBJS) $(LIB)
-	@$(CC) $(CFLAGS) $(THREAD) $(I_DIR) $(OBJS) $(LIB) -o $@
+	@$(CC) $(CFLAGS) $(THREAD) $(SDL) $(I_DIR) $(OBJS) $(LIB) -o $@
 	@echo "$(BLUE)$(OBJS) $(WHITE)->$(RED) $@ $(BASIC)"
 	@echo "$(WHITE)flags:$(BASIC) $(CFLAGS)"
 	@echo "$(WHITE)compi:$(BASIC) $(CC)"
