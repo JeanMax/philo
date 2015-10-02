@@ -6,7 +6,7 @@
 /*   By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/29 13:23:15 by mcanal            #+#    #+#             */
-/*   Updated: 2015/08/05 23:22:18 by mcanal           ###   ########.fr       */
+/*   Updated: 2015/10/01 04:51:10 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # define EAT_T 2
 # define REST_T 1
 # define THINK_T 1
-# define TIMEOUT 20
+# define TIMEOUT 4
 # define NB_PHILO 3
 
 # define WIN_HEIGHT 400
@@ -59,6 +59,11 @@ enum e_state
 # include <time.h>
 
 /*
+** global
+extern  pthread_t       philo[NB_PHILO + 1];
+*/
+
+/*
 ** struct def
 */
 typedef struct s_philo	t_philo;
@@ -73,7 +78,29 @@ struct	s_philo
 
 /*
 ** prototypes
+**	-error.c
 */
-void		error(char e, char *msg);
+void			error(char e, char *msg);
+
+/*
+**	-draw.c
+*/
+void			time_loop(void);
+void			event_sdl(void);
+
+/*
+**	-state.c
+*/
+void			rest(t_philo *ph);
+void			eat(t_philo *ph);
+//void			think(t_philo *ph);
+
+/*
+**	-threads.c
+*/
+void			*philo_thread(void *arg);
+void			launch_threads(pthread_t *philo);
+void			join_threads(pthread_t *philo);
+
 
 #endif

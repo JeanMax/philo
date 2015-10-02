@@ -6,14 +6,13 @@
 #    By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/09/09 21:26:32 by mcanal            #+#    #+#              #
-#    Updated: 2015/08/03 13:51:18 by mcanal           ###   ########.fr        #
+#    Updated: 2015/09/11 19:19:02 by mcanal           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 NAME = libft.a
 I_DIR = -I inc/
 INC = inc/libft.h
-CC = clang
 AR = ar rc
 RM = rm -rf
 MKDIR = mkdir -p
@@ -76,6 +75,12 @@ OBJS =	$(C_EDIT1:%.c=$(O_DIR)/%.o)			$(C_EDIT2:%.c=$(O_DIR)/%.o)	\
 		$(C_MEM:%.c=$(O_DIR)/%.o)			$(C_STR:%.c=$(O_DIR)/%.o)
 DEPS =  $(OBJS:%.o=%.d)
 
+ifeq ($(shell uname), Linux)
+CC = clang-3.5
+else
+CC = clang
+endif
+
 WHITE = \033[37;01m
 RED = \033[31;01m
 GREEN =  \033[32;01m
@@ -95,7 +100,7 @@ sanitize: $(NAME)
 
 -include $(DEPS)
 
-$(NAME): $(OBJS) $(INC)
+$(NAME): $(OBJS)
 	@$(AR) $(NAME) $(OBJS)
 	@echo "$(BLUE)$(OBJS) $(WHITE)->$(RED) $@$(BASIC)"
 	@ranlib $(NAME)

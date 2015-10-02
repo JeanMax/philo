@@ -6,7 +6,7 @@
 /*   By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/03 15:09:46 by mcanal            #+#    #+#             */
-/*   Updated: 2015/07/21 19:21:22 by mcanal           ###   ########.fr       */
+/*   Updated: 2015/09/15 20:54:53 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 
 #include "libft.h"
 
-int		ft_strcmp(const char *s1, const char *s2)
+int				ft_strcmp(const char *s1, const char *s2)
 {
-	while (*s1 && *s2 && *s1 == *s2)
-		s1++, s2++;
+	while (*s1 && *s2 && *s1 == *s2 && s1++ && s2++)
+		;
 	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
