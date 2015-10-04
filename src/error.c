@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/09 19:39:48 by mcanal            #+#    #+#             */
-/*   Updated: 2015/08/05 18:42:26 by mcanal           ###   ########.fr       */
+/*   Updated: 2015/10/03 18:05:12 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 ** error handling
 */
 
-#include "header.h"
+#include "philo.h"
 
 void		error(char e, char *msg)
 {
@@ -30,5 +30,5 @@ void		error(char e, char *msg)
 		failn("SDL_Init failed.");
 	else if (e == SDL_SETVIDEO)
 		failn("SDL_SetVideoMode failed.");
-	exit(EXIT_FAILURE);
+	g_exit = TRUE; //TODO: be sure it will exit before IMPLOSION
 }

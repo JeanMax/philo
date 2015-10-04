@@ -6,12 +6,12 @@
 #    By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/29 13:16:03 by mcanal            #+#    #+#              #
-#    Updated: 2015/10/01 03:33:47 by mcanal           ###   ########.fr        #
+#    Updated: 2015/10/04 17:40:26 by mcanal           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 NAME = philo
-SRC = main.c draw.c state.c threads.c error.c
+SRC = main.c init.c draw.c state.c threads.c error.c move_eating_sticks.c move_thinking_sticks.c
 O_DIR = obj
 C_DIR = src
 VPATH =	src

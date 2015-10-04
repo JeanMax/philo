@@ -5,4 +5,6 @@ Think, eat, sleep
 
 ### TODO: ###
 
-* do it
+* mac os test
+* norm
+* free some vars
