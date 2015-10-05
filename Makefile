@@ -6,7 +6,7 @@
 #    By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/29 13:16:03 by mcanal            #+#    #+#              #
-#    Updated: 2015/10/04 17:40:26 by mcanal           ###   ########.fr        #
+#    Updated: 2015/10/05 16:40:52 by mcanal           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -23,15 +23,19 @@ DEPS =  $(OBJS:%.o=%.d)
 LIB = libft/libft.a
 I_DIR = -I./libft/inc/ -I./inc/ -I/usr/include/SDL/
 CFLAGS = -Wall -Wextra -Werror -O2
-THREAD = -pthread
-SDL = -lSDL # -lSDL_mixer 
 RM = rm -rf
 MKDIR = mkdir -p
 
 ifeq ($(shell uname), Linux)
 CC = clang-3.5
+I_DIR = -I./libft/inc/ -I./inc/ -I/usr/include/SDL/
+SDL = -lSDL
+THREAD = -pthread
 else
 CC = clang
+I_DIR = -I./libft/inc/ -I./inc/ `sdl-config --cflags`
+SDL = `sdl-config --libs`
+THREAD = #-pthread 
 endif
 
 WHITE = \033[37;01m

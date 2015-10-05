@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/16 18:09:34 by mcanal            #+#    #+#             */
-/*   Updated: 2015/10/04 04:34:57 by mcanal           ###   ########.fr       */
+/*   Updated: 2015/10/05 20:38:39 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 t_bool			g_exit;
 
-int				main(int ac, char **av, char **ae)
+int				main(int ac, char *av[])
 {
 	pthread_t		philo[NB_PHILO + 1];
 	pthread_t		timer;
@@ -26,23 +26,16 @@ int				main(int ac, char **av, char **ae)
 	g_exit = FALSE;
 	if (ac != 1)
 		error(USAGE, *av);
-	if (!*ae)
-		error(ENV, NULL);
-
-	//init SDL
 	if (SDL_Init(SDL_INIT_VIDEO) == -1)
 		error(SDL_INIT, NULL);
-	SDL_WM_SetIcon(SDL_LoadBMP("img/smurf/smurf4.bmp"), NULL);
 	SDL_WM_SetCaption("Philosmurf", NULL);
-
-
-	//timer thread
+	SDL_WM_SetIcon(SDL_LoadBMP("img/smurf/smurf4.bmp"), NULL);
 	if (pthread_create(&timer, NULL, timer_thread, \
-					   (void *)launch_threads(philo)))
+				(void *)launch_threads(philo)))
 		error(THR_CREATE, NULL);
-
 	event_sdl();
-
+	if (pthread_join(timer, NULL))
+		error(THR_JOIN, NULL);
 	join_threads(philo);
 	SDL_Quit();
 	return (EXIT_SUCCESS);

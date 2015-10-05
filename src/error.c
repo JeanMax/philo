@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/09 19:39:48 by mcanal            #+#    #+#             */
-/*   Updated: 2015/10/03 18:05:12 by mcanal           ###   ########.fr       */
+/*   Updated: 2015/10/05 20:36:44 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,11 @@
 void		error(char e, char *msg)
 {
 	if (e == USAGE)
-		fail("Usage: "), fail(msg), failn(".");
+	{
+		fail("Usage: ");
+		fail(msg);
+		failn(".");
+	}
 	else if (e == ENV)
 		failn("Env not found.");
 	else if (e == THR_CREATE)
@@ -30,5 +34,6 @@ void		error(char e, char *msg)
 		failn("SDL_Init failed.");
 	else if (e == SDL_SETVIDEO)
 		failn("SDL_SetVideoMode failed.");
-	g_exit = TRUE; //TODO: be sure it will exit before IMPLOSION
+	g_exit = TRUE;
+	exit(EXIT_FAILURE);
 }

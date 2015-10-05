@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/10/01 03:32:31 by mcanal            #+#    #+#             */
-/*   Updated: 2015/10/04 17:00:29 by mcanal           ###   ########.fr       */
+/*   Updated: 2015/10/05 20:41:09 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,14 @@
 void			*timer_thread(void *ph)
 {
 	int			t;
-	t_sdl		sdl; //TODO: free malloc'd elements (cf init_smurfs)
+	t_sdl		sdl;
 
 	if (!(sdl.screen = SDL_SetVideoMode(WIN_WIDTH, WIN_HEIGHT, WIN_BPP, \
 									SDL_HWSURFACE | SDL_DOUBLEBUF)))
-		error(SDL_SETVIDEO, NULL); //SDL_GetError());
-
+		error(SDL_SETVIDEO, NULL);
 	init_smurfs(&sdl);
 	init_sticks(&sdl);
 	init_lives(&sdl);
-
 	t = -1;
 	while (++t <= TIMEOUT && !g_exit)
 	{
@@ -36,12 +34,14 @@ void			*timer_thread(void *ph)
 		ft_putnbr(t);
 		ft_putendl("s");
 		time_loop(&sdl, (t_philo **)ph, t ? TRUE : FALSE);
-		SDL_Flip(sdl.screen); //refresh
-		sleep(1);
+		SDL_Flip(sdl.screen);
+		usleep(1000000);
 	}
 	if (t > TIMEOUT)
 		ft_putendl("Now, it is time... To DAAAAAAAANCE!!!");
-	g_exit = TRUE;
+	while (TRUE)
+		usleep(1000000);
+	exit(EXIT_SUCCESS);
 	return (NULL);
 }
 
@@ -50,26 +50,26 @@ void			*philo_thread(void *arg)
 	t_philo		*ph;
 
 	ph = (t_philo *)arg;
-	sleep(1);
+	usleep(1000000);
 	while (ph->life > 0 && !g_exit)
 		if (ph->state != EAT && !pthread_mutex_trylock(ph->l_stick))
 		{
-			if (!pthread_mutex_trylock(ph->r_stick)) //eating
+			if (!pthread_mutex_trylock(ph->r_stick))
 			{
 				eat(ph);
 				pthread_mutex_unlock(ph->r_stick);
 				pthread_mutex_unlock(ph->l_stick);
 			}
-			else //right stick busy
+			else
 			{
 				rest(ph);
 				pthread_mutex_unlock(ph->l_stick);
 			}
 		}
-		else //left stick busy
+		else
 			rest(ph);
 	if (ph->life <= 0 && !g_exit)
-		ft_debugnbr("DEAD", (int)ph->id); //debug
+		ft_debugnbr("DEAD", (int)ph->id);
 	g_exit = TRUE;
 	return (NULL);
 }
@@ -77,16 +77,16 @@ void			*philo_thread(void *arg)
 t_philo			**launch_threads(pthread_t *philo)
 {
 	static t_philo			*ph;
-	static pthread_mutex_t *stick;
-	size_t			i;
+	static pthread_mutex_t	*stick;
+	size_t					i;
 
-	ph = malloc(sizeof(t_philo) * NB_PHILO); //TODO: free
-	stick = malloc(sizeof(pthread_mutex_t) * NB_PHILO); //TODO: free
+	ph = malloc(sizeof(t_philo) * NB_PHILO);
+	stick = malloc(sizeof(pthread_mutex_t) * NB_PHILO);
 	i = 0;
-	while (i < NB_PHILO)	//init all mutex
+	while (i < NB_PHILO)
 		pthread_mutex_init(&(stick[i++]), NULL);
 	i = 0;
-	while (i < NB_PHILO)	//create all philo threads
+	while (i < NB_PHILO)
 	{
 		ph[i].life = MAX_LIFE;
 		ph[i].state = REST;
@@ -104,10 +104,8 @@ void			join_threads(pthread_t *philo)
 {
 	size_t			i;
 
-	//wait for all threads to die
 	i = 0;
 	while (i < NB_PHILO)
 		if (pthread_join(philo[i++], NULL))
 			error(THR_JOIN, NULL);
-	//TODO: kill timer thread? (detach)
 }

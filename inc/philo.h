@@ -6,7 +6,7 @@
 /*   By: mcanal <mcanal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/29 13:23:15 by mcanal            #+#    #+#             */
-/*   Updated: 2015/10/04 18:16:07 by mcanal           ###   ########.fr       */
+/*   Updated: 2015/10/05 20:47:00 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # define EAT_T		2
 # define REST_T		1
 # define THINK_T	1
-# define TIMEOUT	30
+# define TIMEOUT	60
 
 # define NB_PHILO	7
 # define WIN_HEIGHT	700
@@ -89,27 +89,6 @@
 # define STICK6_LX	(SMURF0_X - 50)
 # define STICK6_LY	(SMURF0_Y - 60)
 
-
-/*
-** enum
-*/
-enum e_rror
-{
-	USAGE,
-	ENV,
-	THR_CREATE,
-	THR_JOIN,
-	SDL_INIT,
-	SDL_SETVIDEO
-};
-
-enum e_state
-{
-	REST,
-	EAT,
-	THINK
-};
-
 /*
 ** include
 */
@@ -121,80 +100,98 @@ enum e_state
 # include <time.h>
 
 /*
+** enum
+*/
+enum	e_rror
+{
+	USAGE,
+	ENV,
+	THR_CREATE,
+	THR_JOIN,
+	SDL_INIT,
+	SDL_SETVIDEO
+};
+
+enum	e_state
+{
+	REST,
+	EAT,
+	THINK
+};
+
+/*
 ** globad
 */
-extern t_bool	g_exit;
+extern t_bool			g_exit;
 
 /*
 ** struct def
 */
 typedef struct s_philo	t_philo;
-struct	s_philo
+struct					s_philo
 {
-	pthread_mutex_t	*r_stick;
-	pthread_mutex_t	*l_stick;
-	int				life;
-	char			state;
-	size_t			id;
+	pthread_mutex_t		*r_stick;
+	pthread_mutex_t		*l_stick;
+	int					life;
+	char				state;
+	size_t				id;
 };
 
 typedef struct s_sdl	t_sdl;
-struct	s_sdl
+struct					s_sdl
 {
-	SDL_Rect	*smurfs_pos;
-	SDL_Rect	*sticks_pos;
-	SDL_Rect	*lives_pos;
-	SDL_Rect	rice_pos;
-	SDL_Surface	*screen;
-	SDL_Surface	*rice;
-	SDL_Surface	**smurfs;
-	SDL_Surface	**sticks;
-	SDL_Surface	**lives;
+	SDL_Rect			*smurfs_pos;
+	SDL_Rect			*sticks_pos;
+	SDL_Rect			*lives_pos;
+	SDL_Rect			rice_pos;
+	SDL_Surface			*screen;
+	SDL_Surface			*rice;
+	SDL_Surface			**smurfs;
+	SDL_Surface			**sticks;
+	SDL_Surface			**lives;
 };
 
 /*
 ** prototypes
 **	-error.c
 */
-void			error(char e, char *msg);
+void					error(char e, char *msg);
 
 /*
 **	-init.c
 */
-void			init_smurfs(t_sdl *sdl);
-void			init_sticks(t_sdl *sdl);
-void			init_lives(t_sdl *sdl);
+void					init_smurfs(t_sdl *sdl);
+void					init_sticks(t_sdl *sdl);
+void					init_lives(t_sdl *sdl);
 
 /*
 **	-draw.c
 */
-void			time_loop(t_sdl *sdl, t_philo **ph, t_bool think);
-void			event_sdl(void);
+void					time_loop(t_sdl *sdl, t_philo **ph, t_bool think);
+void					event_sdl(void);
 
 /*
 **	-move_eating_sticks.c
 */
-void			move_eating_sticks(t_sdl *sdl, t_philo **ph);
+void					move_eating_sticks(t_sdl *sdl, t_philo **ph);
 
 /*
 **	-move_thinking_sticks.c
 */
-void			move_thinking_sticks(t_sdl *sdl, t_philo **ph);
+void					move_thinking_sticks(t_sdl *sdl, t_philo **ph);
 
 /*
 **	-state.c
 */
-void			rest(t_philo *ph);
-void			eat(t_philo *ph);
-//void			think(t_philo *ph);
+void					rest(t_philo *ph);
+void					eat(t_philo *ph);
 
 /*
 **	-threads.c
 */
-void			*philo_thread(void *arg);
-void			*timer_thread(void *arg);
-t_philo			**launch_threads(pthread_t *philo);
-void			join_threads(pthread_t *philo);
-
+void					*philo_thread(void *arg);
+void					*timer_thread(void *arg);
+t_philo					**launch_threads(pthread_t *philo);
+void					join_threads(pthread_t *philo);
 
 #endif

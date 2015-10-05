@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/10/04 03:56:21 by mcanal            #+#    #+#             */
-/*   Updated: 2015/10/04 18:05:49 by mcanal           ###   ########.fr       */
+/*   Updated: 2015/10/05 20:38:03 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,19 @@ static void	fade_sticks(t_sdl *sdl)
 
 	i = -1;
 	while (++i < 7)
-		SDL_SetColorKey(*(sdl->sticks + i), SDL_SRCCOLORKEY,			\
+		SDL_SetColorKey(*(sdl->sticks + i), SDL_SRCCOLORKEY, \
 					SDL_MapRGB((*(sdl->sticks + i))->format, 255, 255, 255));
 	sdl->rice = SDL_LoadBMP("img/rice.bmp");
 	sdl->rice_pos.x = (Sint16)(WIN_WIDTH / 2.2);
 	sdl->rice_pos.y = (Sint16)(WIN_HEIGHT / 2.5);
-	SDL_SetColorKey(sdl->rice, SDL_SRCCOLORKEY,				\
+	SDL_SetColorKey(sdl->rice, SDL_SRCCOLORKEY, \
 				SDL_MapRGB(sdl->rice->format, 255, 255, 255));
 }
 
 void		init_sticks(t_sdl *sdl)
 {
-	sdl->sticks = malloc(sizeof(SDL_Surface *) * 7); //TODO: free
-	sdl->sticks_pos = malloc(sizeof(SDL_Rect) * 7); //TODO: free
+	sdl->sticks = malloc(sizeof(SDL_Surface *) * 7);
+	sdl->sticks_pos = malloc(sizeof(SDL_Rect) * 7);
 	*sdl->sticks = SDL_LoadBMP("img/stick/stick4.bmp");
 	sdl->sticks_pos->x = (Sint16)STICK0_X;
 	sdl->sticks_pos->y = (Sint16)STICK0_Y;
@@ -61,8 +61,8 @@ void		init_sticks(t_sdl *sdl)
 
 void		init_smurfs(t_sdl *sdl)
 {
-	sdl->smurfs = malloc(sizeof(SDL_Surface *) * 7); //TODO: free
-	sdl->smurfs_pos = malloc(sizeof(SDL_Rect) * 7); //TODO: free
+	sdl->smurfs = malloc(sizeof(SDL_Surface *) * 7);
+	sdl->smurfs_pos = malloc(sizeof(SDL_Rect) * 7);
 	*sdl->smurfs = SDL_LoadBMP("img/smurf/smurf5.bmp");
 	sdl->smurfs_pos->x = (Sint16)SMURF0_X;
 	sdl->smurfs_pos->y = (Sint16)SMURF0_Y;
@@ -88,8 +88,8 @@ void		init_smurfs(t_sdl *sdl)
 
 void		init_lives(t_sdl *sdl)
 {
-	sdl->lives = malloc(sizeof(SDL_Surface *) * 7); //TODO: free
-	sdl->lives_pos = malloc(sizeof(SDL_Rect) * 7); //TODO: free
+	sdl->lives = malloc(sizeof(SDL_Surface *) * 7);
+	sdl->lives_pos = malloc(sizeof(SDL_Rect) * 7);
 	*(sdl->lives + 0) = SDL_CreateRGBSurface(SDL_HWSURFACE, LIFE_ARGS);
 	(sdl->lives_pos + 0)->x = (Sint16)SMURF0_X + 10;
 	(sdl->lives_pos + 0)->y = (Sint16)SMURF0_Y + 105;

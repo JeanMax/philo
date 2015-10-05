@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/10/01 03:21:38 by mcanal            #+#    #+#             */
-/*   Updated: 2015/10/03 19:15:12 by mcanal           ###   ########.fr       */
+/*   Updated: 2015/10/05 20:27:46 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,6 @@
 */
 
 #include "philo.h"
-
-/*
-void			think(t_philo *ph)
-{
-	ph->state = THINK;
-	ph->life -= THINK_T;
-	sleep(THINK_T);
-}
-*/
 
 void			eat(t_philo *ph)
 {
@@ -34,7 +25,7 @@ void			eat(t_philo *ph)
 	i = 0;
 	while (i < EAT_T && !g_exit)
 	{
-		sleep(1);
+		usleep(1000000);
 		i++;
 	}
 }
@@ -48,7 +39,7 @@ void			rest(t_philo *ph)
 	while (i < REST_T && !g_exit && ph->life > 0)
 	{
 		ph->life -= 1;
-		sleep(1);
+		usleep(1000000);
 		i++;
 	}
 }

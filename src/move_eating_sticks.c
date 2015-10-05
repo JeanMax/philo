@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/10/04 17:33:51 by mcanal            #+#    #+#             */
-/*   Updated: 2015/10/04 18:06:55 by mcanal           ###   ########.fr       */
+/*   Updated: 2015/10/05 20:39:01 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	move_eating_sticks3(t_sdl *sdl, t_philo **ph)
 		(sdl->sticks_pos + 6)->y = (Sint16)STICK6_RY;
 		(sdl->sticks_pos + 5)->x = (Sint16)STICK5_LX;
 		(sdl->sticks_pos + 5)->y = (Sint16)STICK5_LY;
-	}		
+	}
 }
 
 static void	move_eating_sticks2(t_sdl *sdl, t_philo **ph)

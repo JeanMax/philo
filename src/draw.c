@@ -6,7 +6,7 @@
 /*   By: mcanal <zboub@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/10/01 03:18:55 by mcanal            #+#    #+#             */
-/*   Updated: 2015/10/04 18:06:23 by mcanal           ###   ########.fr       */
+/*   Updated: 2015/10/05 20:36:02 by mcanal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,21 @@ void			event_sdl(void)
 			break ;
 	}
 	g_exit = TRUE;
+	exit(EXIT_SUCCESS);
 }
 
-static void		debug(t_philo **ph)
+static void		debug(t_philo **ph, t_sdl *sdl)
 {
 	int		i;
 
 	i = -1;
 	while (++i < NB_PHILO)
 	{
+		sdl->lives[i]->w = 80 * (*ph + i)->life / MAX_LIFE;
+		SDL_FillRect(*(sdl->lives + i), NULL, \
+					SDL_MapRGB(sdl->screen->format, 0, 255, 0));
+		SDL_BlitSurface(*(sdl->lives + i), NULL, sdl->screen, \
+						sdl->lives_pos + i);
 		ft_putstr("id:");
 		ft_putnbr(i);
 		ft_putstr(" life:");
@@ -71,7 +77,7 @@ static void		debug(t_philo **ph)
 		else if ((*ph + i)->state == REST)
 			ft_putendl("rest");
 		else
-			ft_putendl("eat");	 
+			ft_putendl("eat");
 	}
 	ft_putendl("");
 }
@@ -81,34 +87,22 @@ void			time_loop(t_sdl *sdl, t_philo **ph, t_bool think)
 	int		i;
 
 	SDL_FillRect(sdl->screen, NULL, \
-				 SDL_MapRGB(sdl->screen->format, 255, 255, 255));
+				SDL_MapRGB(sdl->screen->format, 255, 255, 255));
 	SDL_BlitSurface(sdl->rice, NULL, sdl->screen, &sdl->rice_pos);
-
 	i = -1;
 	while (++i < NB_PHILO)
 	{
 		if (((*ph + i - (i == 0 ? -(NB_PHILO - 1) : 1))->state == REST \
 	|| (*ph + i + (i == NB_PHILO - 1 ? -(NB_PHILO - 1) : 1))->state == REST) \
 	&& (*ph + i)->state == REST && think)
-			(*ph + i)->state = THINK; //handle think state
-
+			(*ph + i)->state = THINK;
 		SDL_BlitSurface(*(sdl->smurfs + i), NULL, sdl->screen, \
-						sdl->smurfs_pos + i); //draw smurfs
+						sdl->smurfs_pos + i);
 	}
 	move_sticks(sdl, ph);
 	i = -1;
 	while (++i < NB_PHILO)
 		SDL_BlitSurface(*(sdl->sticks + i), NULL, sdl->screen, \
-						sdl->sticks_pos + i);	 //draw sticks
-	i = -1;
-	while (++i < NB_PHILO)
-	{
-		sdl->lives[i]->w = 80 * (*ph + i)->life / MAX_LIFE;
-		SDL_FillRect(*(sdl->lives + i), NULL,					\
-					 SDL_MapRGB(sdl->screen->format, 255, 0, 0));
-		SDL_BlitSurface(*(sdl->lives + i), NULL, sdl->screen, \
-						sdl->lives_pos + i); //draw life
-	}
-
-	debug(ph); //infos to stdout
+						sdl->sticks_pos + i);
+	debug(ph, sdl);
 }
