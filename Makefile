@@ -26,17 +26,19 @@ CFLAGS = -Wall -Wextra -Werror -O2
 RM = rm -rf
 MKDIR = mkdir -p
 
-ifeq ($(shell uname), Linux)
-CC = clang-3.5
-I_DIR = -I./libft/inc/ -I./inc/ -I/usr/include/SDL/
-SDL = -lSDL
-THREAD = -pthread
-else
+#ifeq ($(shell uname), Linux)
+#CC = clang-3.5
+#I_DIR = -I./libft/inc/ -I./inc/ -I/usr/include/SDL/
+#SDL = -lSDL
+#THREAD = -pthread
+#else
+#CC = clang
+#I_DIR = -I./libft/inc/ -I./inc/ `sdl-config --cflags`
+#SDL = `sdl-config --libs`
+#THREAD = #-pthread 
+#endif
+
 CC = clang
-I_DIR = -I./libft/inc/ -I./inc/ `sdl-config --cflags`
-SDL = `sdl-config --libs`
-THREAD = #-pthread 
-endif
 
 WHITE = \033[37;01m
 RED = \033[31;01m
