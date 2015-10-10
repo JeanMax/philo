@@ -32,13 +32,11 @@ MKDIR = mkdir -p
 #SDL = -lSDL
 #THREAD = -pthread
 #else
-#CC = clang
-#I_DIR = -I./libft/inc/ -I./inc/ `sdl-config --cflags`
-#SDL = `sdl-config --libs`
-#THREAD = #-pthread 
-#endif
-
 CC = clang
+I_DIR = -I./libft/inc/ -I./inc/ `sdl-config --cflags`
+SDL = `sdl-config --libs`
+THREAD = -pthread 
+#endif
 
 WHITE = \033[37;01m
 RED = \033[31;01m
